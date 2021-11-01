@@ -1,0 +1,12 @@
+void printboard(int b[]);
+char decode(int n);
+int td(int mno);
+int movmkr(int pos, int mno, int b[]);
+int legalmv(int pos, int b[]);
+void initar(int b[]);
+int dgt(char a[]);
+int checker(int b[], int p, int s, int lim);
+int winchecker(int b[]);
+void terminal(int b[], int turn, int win);
+int dwckr(int b[]);
+int minimax(int b[], int turn, int depth);

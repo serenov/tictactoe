@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
-char decode(int n);
-int legalmv(int pos, int b[9]);
-void printboard(int b[9])
+#include"include.h"
+#include"winchecker.c"
+#include"minmax.c"
+void printboard(int b[])
 {
 	printf("\n");
 	printf("____ ____ ____ \n");
@@ -32,8 +33,9 @@ int td(int mno)
 	       return 1;
 	return -1;	
 }
-int movmkr(int pos, int mno, int b[9])
+int movmkr(int pos, int mno, int b[])
 {
+	
 	if(legalmv(pos, b)){
 		b[pos] = td(mno);
 		return 1;
@@ -41,7 +43,7 @@ int movmkr(int pos, int mno, int b[9])
 	printf("Invalid input.\n");
 	return 0;
 }
-int legalmv(int pos, int b[9])
+int legalmv(int pos, int b[])
 {
 	if(pos < 9)
 	{
@@ -53,7 +55,7 @@ int legalmv(int pos, int b[9])
 	}
 	return 0;
 }
-void initar(int b[9])
+void initar(int b[])
 {
 	for(int i = 0; i < 9; i++)
 		b[i] = 0;
@@ -67,19 +69,6 @@ int dgt(char a[8])
 	}
 	return 10;
 }
-int checker(int b[], int p, int s, int lim)
-{
-	if(s + p > lim)
-		return b[s - 1]; 
-	int t = checker(b, p, s + p, lim);
-	if(t == b[s - 1])
-		return b[s - 1]; 
-	return 0;
-}
-int winchecker(int b[])
-{
-	return checker(b, 1, 1, 3)||checker(b, 1, 4, 6)||checker(b, 1, 7, 9)||checker(b, 4, 1, 9)||checker(b, 2, 3, 7)||checker(b, 3, 1, 9)||checker(b, 3, 2, 9)||checker(b, 3, 3, 9);
-}
 void terminal(int b[], int turn, int win)
 {
 	printboard(b);
@@ -90,25 +79,40 @@ void terminal(int b[], int turn, int win)
 		printf("%c is the winner!\n", decode(turn));
 	}
 }
-int main()
+int cmplr(int b[], int mov, int cmp)
 {
-	int b[9]; 
 	char plrin[8];
-	initar(b);
-	int win = 0, mov;
+	if(mov % 2 == cmp){
+	printboard(b);
+	printf("It's player %c's turn, choose a position b/t 1-9: ", decode(td(mov)));
+	scanf("%s", plrin);
 	system("clear");
+	if(movmkr(dgt(plrin) - 1, mov, b) == 0)
+		return 0;
+	}
+	else
+		b[minimax(b, td(mov), 0) - 1] = td(mov);
+	return 1;
+}
+void twoplr(int b[])
+{
+	int mov, win = 0;
 	for(mov = 1; mov < 10; mov++)
 	{
-		printboard(b);
-		printf("It's player %c's turn, choose a position b/t 1-9: ", decode(td(mov)));
-		scanf("%s", plrin);
-		system("clear");
-		if(movmkr(dgt(plrin) - 1, mov, b) == 0)
+		if(plr(b, mov) == 0)
 			mov--;
 		win = winchecker(b);
 		if(win != 0)
 			break;
+
 	}
 	terminal(b, td(mov), win);
+}
+int main()
+{
+	int b[9]; 
+	initar(b);
+	system("clear");
+	twoplr(b);
 	return 0;
 }
