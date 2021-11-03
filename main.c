@@ -99,7 +99,7 @@ void twoplr(int b[])
 	int mov, win = 0;
 	for(mov = 1; mov < 10; mov++)
 	{
-		if(plr(b, mov) == 0)
+		if(cmplr(b, mov, 1) == 0)
 			mov--;
 		win = winchecker(b);
 		if(win != 0)
