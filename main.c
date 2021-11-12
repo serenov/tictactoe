@@ -64,7 +64,7 @@ int dgt(char a)
 {
 	if(a > 48 && a < 58)
 	{
-		return (a[0] - 48);
+		return (a - 48);
 	}
 	return 10;
 }
