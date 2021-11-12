@@ -60,12 +60,11 @@ void initar(int b[])
 	for(int i = 0; i < 9; i++)
 		b[i] = 0;
 }
-int dgt(char a[8])
+int dgt(char a)
 {
-	if(a[0] > 48 && a[0] < 58)
+	if(a > 48 && a < 58)
 	{
-		if(a[1] == '\0')
-			return (a[0] - 48);
+		return (a[0] - 48);
 	}
 	return 10;
 }
@@ -81,11 +80,11 @@ void terminal(int b[], int turn, int win)
 }
 int cmplr(int b[], int mov, int cmp)
 {
-	char plrin[8];
+	char plrin;
 	if(mov % 2 == cmp){
 	printboard(b);
 	printf("It's player %c's turn, choose a position b/t 1-9: ", decode(td(mov)));
-	scanf("%s", plrin);
+	plrin = getchar();
 	system("clear");
 	if(movmkr(dgt(plrin) - 1, mov, b) == 0)
 		return 0;
