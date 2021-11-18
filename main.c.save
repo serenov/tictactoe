@@ -40,6 +40,7 @@ int movmkr(int pos, int mno, int b[])
 		b[pos] = td(mno);
 		return 1;
 	}
+	printf("Invalid input.\n");
 	return 0;
 }
 int legalmv(int pos, int b[])
@@ -59,11 +60,12 @@ void initar(int b[])
 	for(int i = 0; i < 9; i++)
 		b[i] = 0;
 }
-int dgt(char a)
+int dgt(char a[8])
 {
-	if(a > 48 && a < 58)
+	if(a[0] > 48 && a[0] < 58)
 	{
-		return (a - 48);
+		if(a[1] == '\0')
+			return (a[0] - 48);
 	}
 	return 10;
 }
@@ -79,15 +81,14 @@ void terminal(int b[], int turn, int win)
 }
 int cmplr(int b[], int mov, int cmp)
 {
-	char plrin;
+	char plrin[8];
 	if(mov % 2 == cmp){
-		printboard(b);
-		printf("It's player %c's turn, choose a position b/t 1-9: ", decode(td(mov)));
-		plrin = getc(stdin);
-		while(getc(stdin) != '\n');
-		system("clear");
-		if(movmkr(dgt(plrin) - 1, mov, b) == 0)
-			return 0;
+	printboard(b);
+	printf("It's player %c's turn, choose a position b/t 1-9: ", decode(td(mov)));
+	scanf("%s", plrin);
+	system("clear");
+	if(movmkr(dgt(plrin) - 1, mov, b) == 0)
+		return 0;
 	}
 	else
 		b[minimax(b, td(mov), 0) - 1] = td(mov);
@@ -98,12 +99,12 @@ void twoplr(int b[])
 	int mov, win = 0;
 	for(mov = 1; mov < 10; mov++)
 	{
-		if(cmplr(b, mov, 1) == 0){
-			printf("Invalid input.\n");
-			mov--;}
+		if(cmplr(b, mov, 0) == 0)
+			mov--;
 		win = winchecker(b);
 		if(win != 0)
 			break;
+
 	}
 	terminal(b, td(mov), win);
 }
